@@ -1,5 +1,6 @@
 import Login from '@/pages/admin/login.vue'
 import Index from '@/pages/frontend/index.vue'
+import AdminIndex from '@/pages/admin/index.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 //统一声明路由
@@ -18,6 +19,13 @@ const routes = [
     meta: {
       //meta信息
       title: 'weblog 登录页' //页面标题
+    }
+  },
+  {
+    path: '/admin/index',
+    component: AdminIndex,
+    meta: {
+      title: 'Admin 后台首页'
     }
   }
 ]
