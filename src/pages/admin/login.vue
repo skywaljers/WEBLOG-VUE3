@@ -59,7 +59,12 @@
           </el-form-item>
           <el-form-item>
             <!-- 登录按钮 ，宽度设置为100%-->
-            <el-button class="w-full mt-2" @click="onSubmit" size="large" type="primary"
+            <el-button
+              class="w-full mt-2"
+              @click="onSubmit"
+              size="large"
+              type="primary"
+              :loading="loading"
               >登录</el-button
             >
           </el-form-item>
@@ -72,8 +77,10 @@
 <script setup>
 import { User, Lock } from '@element-plus/icons-vue'
 import { login } from '@/api/admin/user'
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, onBeforeMount } from 'vue'
 import router from '@/router'
+import { showMessage } from '@/composables/util'
+import { ElMessage } from 'element-plus'
 
 //定义响应式的表单对象
 const form = reactive({
@@ -83,6 +90,28 @@ const form = reactive({
 
 //表单引用
 const formRef = ref(null)
+
+//登录按钮加载
+const loading = ref(false)
+
+//按回车键后，执行登录事件
+function onKeyUp(e) {
+  console.log(e)
+  if (e.key == 'Enter') {
+    onSubmit()
+  }
+}
+
+//添加键盘监听
+onMounted(() => {
+  console.log('添加键盘监听')
+  document.addEventListener('keyup', onKeyUp)
+})
+
+//移除键盘监听
+onBeforeMount(() => {
+  document.removeEventListener('keyup', onKeyUp)
+})
 
 //登录
 const onSubmit = () => {
@@ -94,14 +123,29 @@ const onSubmit = () => {
       console.log('表单校验不通过')
       return false
     }
+    loading.value = true
+    showMessage('登录成功')
     router.push('/admin/index')
-    // login(form.username, form.password).then((res) => {
-    //   console.log(res)
+    // login(form.username, form.password)
+    //   .then((res) => {
+    //     console.log(res)
 
-    //   if (res.data.success == true) {
-    //     router.push('/admin/index')
-    //   }
-    // })
+    //     if (res.data.success == true) {
+    //       //提示登录成功
+    //       showMessage('登录成功')
+
+    //       router.push('/admin/index')
+    //     } else {
+    //       //获取服务器端返回的错误信息
+    //       let message = res.data.message
+    //       //提示信息
+    //       showMessage(message, 'error')
+    //     }
+    //   })
+    //   .finally(() => {
+    //     //结束加载
+    //     loading.value = false
+    //   })
   })
 }
 
