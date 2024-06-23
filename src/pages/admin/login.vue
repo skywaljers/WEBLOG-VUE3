@@ -31,8 +31,12 @@
           <span class="h-[1px] w-16 bg-gray-200"></span>
         </div>
         <!-- 引入Element Plus表单组件，移动端设置宽度为 5/6，PC 端设置为 2/5  -->
-        <el-form class="w-5/6 md:w-2/5">
-          <el-form-item>
+        <!-- ref="formRef" ： 添加表单引用，用于方便的获取表单； 
+          :rules="rules" : 对表单添加字段校验规则；
+          :model="form" ：将表单和 form 变量绑定在一起；
+        -->
+        <el-form class="w-5/6 md:w-2/5" ref="formRef" :rules="rules" :model="form">
+          <el-form-item prop="username">
             <!-- 输入框组件 -->
             <el-input
               size="large"
@@ -43,7 +47,7 @@
             />
           </el-form-item>
           <!-- 密码框组件 -->
-          <el-form-item>
+          <el-form-item prop="password">
             <el-input
               size="large"
               type="password"
@@ -68,7 +72,7 @@
 <script setup>
 import { User, Lock } from '@element-plus/icons-vue'
 import { login } from '@/api/admin/user'
-import { reactive } from 'vue'
+import { ref, reactive } from 'vue'
 import router from '@/router'
 
 //定义响应式的表单对象
@@ -77,16 +81,44 @@ const form = reactive({
   password: ''
 })
 
+//表单引用
+const formRef = ref(null)
+
 //登录
 const onSubmit = () => {
   console.log('登录')
-  router.push('/admin/index')
-  // login(form.username, form.password).then((res) => {
-  //   console.log(res)
 
-  //   if (res.data.success == true) {
-  //     router.push('/admin/index')
-  //   }
-  // })
+  //先校验 form 表单字段
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      console.log('表单校验不通过')
+      return false
+    }
+    router.push('/admin/index')
+    // login(form.username, form.password).then((res) => {
+    //   console.log(res)
+
+    //   if (res.data.success == true) {
+    //     router.push('/admin/index')
+    //   }
+    // })
+  })
+}
+
+const rules = {
+  username: [
+    {
+      required: true,
+      message: '用户名不能为空',
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: '密码不能为空',
+      trigger: 'blur'
+    }
+  ]
 }
 </script>
