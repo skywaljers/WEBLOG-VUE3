@@ -1,6 +1,7 @@
 import '@/assets/main.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from '@/App.vue'
 import 'animate.css'
 import 'nprogress/nprogress.css'
@@ -14,6 +15,11 @@ const app = createApp(App)
 //应用路由
 app.use(router)
 app.mount('#app')
+
+const pinia = createPinia()
+
+// 启用pinia
+app.use(pinia)
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)

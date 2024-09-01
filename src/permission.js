@@ -31,7 +31,7 @@ router.beforeEach((to, from, next) => {
 //全局路由后置守卫
 router.afterEach((to, from) => {
   //动态设置页面Title
-  let title = (to.meta.title ? to.meta.title : '') + ' - Weblog'
+  let title = (to.meta.title ? to.meta.title : '') + ' - naruto'
   document.title = title
   hidePageLoading()
 })

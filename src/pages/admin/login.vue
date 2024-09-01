@@ -126,30 +126,30 @@ const onSubmit = () => {
       return false
     }
     loading.value = true
-    showMessage('登录成功')
-    router.push('/admin/index')
+    //showMessage('登录成功')
+    //router.push('/admin/index')
 
-    // login(form.username, form.password)
-    //   .then((res) => {
-    //     console.log(res)
+    login(form.username, form.password)
+      .then((res) => {
+        console.log(res)
 
-    //     if (res.success == true) {
-    //       //提示登录成功
-    //       showMessage('登录成功')
-    //       let token = res.token
-    //       setToken(token)
-    //       router.push('/admin/index')
-    //     } else {
-    //       //获取服务器端返回的错误信息
-    //       let message = res.message
-    //       //提示信息
-    //       showMessage(message, 'error')
-    //     }
-    //   })
-    //   .finally(() => {
-    //     //结束加载
-    //     loading.value = false
-    //   })
+        if (res.success == true) {
+          //提示登录成功
+          showMessage('登录成功')
+          let token = res.token
+          setToken(token)
+          router.push('/admin/index')
+        } else {
+          //获取服务器端返回的错误信息
+          let message = res.message
+          //提示信息
+          showMessage(message, 'error')
+        }
+      })
+      .finally(() => {
+        //结束加载
+        loading.value = false
+      })
   })
 }
 
