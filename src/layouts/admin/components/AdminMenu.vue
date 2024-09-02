@@ -1,56 +1,75 @@
 <template>
-  <div class="bg-slate-800 h-screen text-white">
+  <div
+    class="bg-slate-800 h-screen text-white menu-container transition-all"
+    :style="{ width: menuStore.menuWidth }"
+  >
     <!-- logo -->
-     <div class="flex items-center justify-center h-[64px]">
-      <img src="/src/assets/鸣人blog.png" class="h-[105px]"/>
-     </div>
+    <!-- 判断侧边栏是否折叠，是则使用小图，否则使用大图 -->
+    <div class="flex items-center justify-center h-[64px]">
+      <img
+        v-if="menuStore.menuWidth == '64px'"
+        src="/src/assets/鸣人blog 小图.png"
+        class="h-[42px]"
+      />
+      <img v-else src="/src/assets/鸣人blog.png" class="h-[105px]" />
+    </div>
+    <!-- <div class="flex items-center justify-center h-[64px]">
+      <img src="/src/assets/鸣人blog.png" class="h-[105px]" />
+    </div> -->
 
-     <!-- 菜单栏 -->
-      <!-- 下方菜单 -->
-      <el-menu :default-active="defaultActive" @select="handleSelect">
-        <template v-for="(item,index) in menus" :key="index">
-          <el-menu-item :index="item.path">
-            <el-icon>
-              <!-- 动态图标 -->
-               <component :is="item.icon"></component>
-            </el-icon>
-            <span>{{ item.name }}</span>
-          </el-menu-item>
-        </template>
-      </el-menu>
+    <!-- 菜单栏 -->
+    <!-- 下方菜单 -->
+    <el-menu
+      :default-active="defaultActive"
+      @select="handleSelect"
+      :collapse="isCollapse"
+      :collapse-transition="false"
+    >
+      <template v-for="(item, index) in menus" :key="index">
+        <el-menu-item :index="item.path" :title="item.name">
+          <el-icon>
+            <!-- 动态图标 -->
+            <component :is="item.icon"></component>
+          </el-icon>
+          <span>{{ item.name }}</span>
+        </el-menu-item>
+      </template>
+    </el-menu>
   </div>
 </template>
 
 <!-- setup：template中可以直接使用script中定义的变量 -->
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useMenuStore } from '@/stores/menu'
+const menuStore = useMenuStore()
 const menus = [
-    {
-        'name': '仪表盘',
-        'icon': 'Monitor',
-        'path': '/admin/index'
-    },
-    {
-        'name': '文章管理',
-        'icon': 'Document',
-        'path': '/admin/article/list',
-    },
-    {
-        'name': '分类管理',
-        'icon': 'FolderOpened',
-        'path': '/admin/category/list',
-    },
-    {
-        'name': '标签管理',
-        'icon': 'PriceTag',
-        'path': '/admin/tag/list',
-    },
-    {
-        'name': '博客设置',
-        'icon': 'Setting',
-        'path': '/admin/blog/setting',
-    },
+  {
+    name: '仪表盘',
+    icon: 'Monitor',
+    path: '/admin/index'
+  },
+  {
+    name: '文章管理',
+    icon: 'Document',
+    path: '/admin/article/list'
+  },
+  {
+    name: '分类管理',
+    icon: 'FolderOpened',
+    path: '/admin/category/list'
+  },
+  {
+    name: '标签管理',
+    icon: 'PriceTag',
+    path: '/admin/tag/list'
+  },
+  {
+    name: '博客设置',
+    icon: 'Setting',
+    path: '/admin/blog/setting'
+  }
 ]
 
 const route = useRouter()
@@ -58,6 +77,10 @@ const route = useRouter()
 // 根据路由地址判断哪个菜单被选中
 const defaultActive = ref(route.path)
 
+// 菜单折叠状态
+const isCollapse = computed(() => {
+  return !(menuStore.menuWidth == '300px')
+})
 // 菜单选择事件
 const handleSelect = (path) => {
   console.log(path)
@@ -65,35 +88,34 @@ const handleSelect = (path) => {
 }
 </script>
 
-
 <style scoped>
 .el-menu {
-    background-color: rgb(30 41 59 / 1);
-    border-right: 0;
+  background-color: rgb(30 41 59 / 1);
+  border-right: 0;
 }
 
 .el-sub-menu__title {
-    color: #fff;
+  color: #fff;
 }
 
 .el-sub-menu__title:hover {
-    background-color: #ffffff10;
+  background-color: #ffffff10;
 }
 
 .el-menu-item.is-active {
-    background-color: var(--el-color-primary);
-    color: #fff;
+  background-color: var(--el-color-primary);
+  color: #fff;
 }
 
 .el-menu-item.is-active:hover {
-    background-color: var(--el-color-primary);
+  background-color: var(--el-color-primary);
 }
 
 .el-menu-item {
-    color: #fff;
+  color: #fff;
 }
 
 .el-menu-item:hover {
-    background-color: #ffffff10;
+  background-color: #ffffff10;
 }
 </style>

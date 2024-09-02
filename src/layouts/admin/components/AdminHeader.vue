@@ -9,18 +9,35 @@
       class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 hover:bg-gray-200"
       @click="handleMenuWidth"
     >
-      <el-icon><Fold /></el-icon>
+      <el-icon
+        ><Fold v-if="menuStore.menuWidth == '300px'" />
+        <Expand v-else />
+      </el-icon>
     </div>
 
     <!-- 右边容器，通过mo-auto让其在父容器的右边 -->
     <div class="ml-auto flex">
+      <!-- 刷新按钮 -->
+      <!-- placement指定对齐方式 -->
+      <el-tooltip class="box-item" effect="dark" content="刷新" placement="bottom">
+        <div
+          class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 hover:bg-gray-200 mr-2"
+          @click="handleRefresh"
+        >
+          <el-icon><Refresh /></el-icon>
+        </div>
+      </el-tooltip>
       <!-- 全屏按钮 -->
       <!-- placement指定对齐方式 -->
       <el-tooltip class="box-item" effect="dark" content="全屏" placement="bottom">
         <div
           class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 hover:bg-gray-200 mr-2"
+          @click="toggle"
         >
-          <el-icon><FullScreen /></el-icon>
+          <el-icon
+            ><FullScreen v-if="!isFullscreen" />
+            <Aim v-else />
+          </el-icon>
         </div>
       </el-tooltip>
 
@@ -47,11 +64,17 @@
 </template>
 
 <script setup>
-import {useMenuStore} from '@/stores/menu'
-
+import { useMenuStore } from '@/stores/menu'
+import { useFullscreen } from '@vueuse/core'
 const menuStore = useMenuStore()
+
+const { isFullscreen, toggle } = useFullscreen()
 
 const handleMenuWidth = () => {
   menuStore.handleMenuWidth()
+}
+
+const handleRefresh = () => {
+  window.location.reload()
 }
 </script>
