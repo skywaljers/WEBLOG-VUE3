@@ -17,7 +17,7 @@
         <!-- 主容器 -->
         <el-main>
           <!-- 主内容，根据路由动态展示不同页面 -->
-           <AdminTagList></AdminTagList>
+           <AdminTagList class="transition-all"></AdminTagList>
            <router-view></router-view>
         </el-main>
 

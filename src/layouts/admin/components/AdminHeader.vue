@@ -1,6 +1,6 @@
 <template>
   <!-- 白色背景色，高度64px，padding-right为4，border-bottom为slate200 -->
-  <div class="bg-white h-[64px] flex pr-4 border-b border-slate-200">
+  <div class="bg-white h-[64px] flex pr-4 border-b border-slate-200 border-slate-100">
     <!-- 左边收缩栏 -->
     <!-- cursor-pointer:鼠标指上去变成小手指。 -->
     <!-- flex items-center justify-center:搭配使用，水平居中 -->
@@ -42,7 +42,7 @@
       </el-tooltip>
 
       <!-- 登录用户头像 -->
-      <el-dropdown>
+      <el-dropdown class="flex items-center justify-center">
         <span
           class="el-dropdown-link text-white flex items-center justify-center text-gray-700 text-xs"
         >
