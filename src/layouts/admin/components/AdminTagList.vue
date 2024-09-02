@@ -31,8 +31,8 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>关闭其他</el-dropdown-item>
-            <el-dropdown-item>关闭全部</el-dropdown-item>
+            <el-dropdown-item @click="removeOtherTab">关闭其他</el-dropdown-item>
+            <el-dropdown-item @click="removeTabAll">关闭全部</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -95,21 +95,35 @@ const addTab = (tab) => {
   // 将tablist列表存储到cookie中
   setTabList(tabList.value)
 }
-const removeTab = (targetName) => {
-  // const tabs = tabList.value
-  // let activeName = activeTab.value
-  // if (activeName === targetName) {
-  //   tabs.forEach((tab, index) => {
-  //     if (tab.name === targetName) {
-  //       const nextTab = tabs[index + 1] || tabs[index - 1]
-  //       if (nextTab) {
-  //         activeName = nextTab.path
-  //       }
-  //     }
-  //   })
-  // }
-  // activeTab.value = activeName
-  // tabList.value = tabs.filter((tab) => tab.path !== targetName)
+
+
+// 删除标签
+const removeTab = (path) => {
+  let tabs = tabList.value
+  let actTab = activeTab.value
+  //判断删除的是否是当前激活的标签
+  if (actTab === path) {
+    // 删除当前激活的标签
+    tabs.forEach((tab, index) => {
+      if (tab.path === path) {
+        let nextTab = tabs[index + 1] || tabs[index - 1]
+        if (nextTab) {
+          actTab = nextTab.path
+        }
+      }
+    })
+  }
+
+  activeTab.value = actTab
+
+  //过滤掉被删除的标签
+  tabList.value = tabs.filter((tab) => tab.path !== path)
+
+  // 存储到cookie中
+  setTabList(tabList.value)
+
+  // 切换标签页
+  tabChange(activeTab.value)
 }
 
 function initTabList() {
