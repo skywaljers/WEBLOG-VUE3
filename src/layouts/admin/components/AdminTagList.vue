@@ -4,18 +4,19 @@
     :style="{ left: menuStore.menuWidth }"
   >
     <el-tabs
-      v-model="editableTabsValue"
+      v-model="activeTab"
       type="card"
       class="demo-tabs"
-      closable
       @tab-remove="removeTab"
-      style="min-width: 10px;"
+      style="min-width: 10px"
+      @tab-change="tabChange"
     >
       <el-tab-pane
-        v-for="item in editableTabs"
-        :key="item.name"
+        v-for="item in tabList"
+        :key="item.path"
         :label="item.title"
-        :name="item.name"
+        :name="item.path"
+        :closable="item.path != '/admin/index'"
       >
         {{ item.content }}
       </el-tab-pane>
@@ -43,64 +44,83 @@
 <script setup>
 import { ref } from 'vue'
 import { useMenuStore } from '@/stores/menu'
+import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
+import { setTabList,getTabList} from '@/composables/tag-list'
 
 const menuStore = useMenuStore()
-let tabIndex = 2
-const editableTabsValue = ref('2')
-const editableTabs = ref([
-{
-        title: '仪表盘',
-        name: '1',
-        content: 'Tab 1 content',
-    },
-    {
-        title: '文章管理',
-        name: '2',
-        content: 'Tab 2 content',
-    },
-    {
-        title: '分类管理',
-        name: '3',
-        content: 'Tab 1 content',
-    },
-    {
-        title: '标签管理',
-        name: '4',
-        content: 'Tab 1 content',
-    },
-    {
-        title: '博客设置',
-        name: '5',
-        content: 'Tab 1 content',
-    }
+
+const route = useRoute()
+
+const router = useRouter()
+// let tabIndex = 2
+const activeTab = ref(route.path)
+const tabList = ref([
+  {
+    title: '仪表盘',
+    path: '/admin/index'
+  }
 ])
 
-const addTab = (targetName) => {
-  const newTabName = `${++tabIndex}`
-  editableTabs.value.push({
-    title: 'New Tab',
-    name: newTabName,
-    content: 'New Tab content'
+const tabChange = (path) => {
+  console.log(path)
+
+  // 设置被激活的tab标签
+  activeTab.value = path
+  router.push(path)
+}
+
+// 在路由切换前被调用
+onBeforeRouteUpdate((to, from) => {
+  //打印控制台日志
+  console.log({
+    title: to.meta.title,
+    path: to.path
   })
-  editableTabsValue.value = newTabName
+  // 设置被激活的Tab标签
+  activeTab.value = to.path
+  // 添加Tab标签页
+  addTab({
+    title: to.meta.title,
+    path: to.path
+  })
+})
+
+// 添加标签页
+const addTab = (tab) => {
+  // 标签是否存在
+  let isTabNoNotExisted = tabList.value.findIndex((item) => item.path === tab.path) == -1
+  if (isTabNoNotExisted) {
+    tabList.value.push(tab)
+  }
+  // 将tablist列表存储到cookie中
+  setTabList(tabList.value)
 }
 const removeTab = (targetName) => {
-  const tabs = editableTabs.value
-  let activeName = editableTabsValue.value
-  if (activeName === targetName) {
-    tabs.forEach((tab, index) => {
-      if (tab.name === targetName) {
-        const nextTab = tabs[index + 1] || tabs[index - 1]
-        if (nextTab) {
-          activeName = nextTab.name
-        }
-      }
-    })
-  }
-
-  editableTabsValue.value = activeName
-  editableTabs.value = tabs.filter((tab) => tab.name !== targetName)
+  // const tabs = tabList.value
+  // let activeName = activeTab.value
+  // if (activeName === targetName) {
+  //   tabs.forEach((tab, index) => {
+  //     if (tab.name === targetName) {
+  //       const nextTab = tabs[index + 1] || tabs[index - 1]
+  //       if (nextTab) {
+  //         activeName = nextTab.path
+  //       }
+  //     }
+  //   })
+  // }
+  // activeTab.value = activeName
+  // tabList.value = tabs.filter((tab) => tab.path !== targetName)
 }
+
+function initTabList() {
+  // 从cookie中获取缓存起来的标签导航栏数据
+  let tabs = getTabList()
+  if(tabs !=null) {
+    tabList.value = tabs
+  }
+}
+
+initTabList()
 </script>
 <style>
 .el-tabs__item {
