@@ -18,7 +18,13 @@
         <el-main>
           <!-- 主内容，根据路由动态展示不同页面 -->
            <AdminTagList class="transition-all"></AdminTagList>
-           <router-view></router-view>
+           <!-- v-slot="{ Component }" 是 Vue 3 中的插槽语法。它表示为<router-view>组件定义了一个插槽，并将当前路由的组件赋值给了 Component 变量 -->
+           <router-view v-slot="{ Component }">
+            <!-- 指定最多缓存10个组件 -->
+             <KeepAlive :max="10">
+              <component :is="Component" />
+             </KeepAlive>
+           </router-view>
         </el-main>
 
         <!-- 底部 -->
