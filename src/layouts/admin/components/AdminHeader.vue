@@ -66,6 +66,7 @@
 <script setup>
 import { useMenuStore } from '@/stores/menu'
 import { useFullscreen } from '@vueuse/core'
+import { updatePassword } from '@/api/admin/user'
 const menuStore = useMenuStore()
 
 const { isFullscreen, toggle } = useFullscreen()

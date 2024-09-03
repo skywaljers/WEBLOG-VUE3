@@ -136,7 +136,9 @@ const onSubmit = () => {
         if (res.success == true) {
           //提示登录成功
           showMessage('登录成功')
-          let token = res.token
+          let token = res.data.tokenValue
+          console.log("token: "+token);
+          
           setToken(token)
           router.push('/admin/index')
         } else {
