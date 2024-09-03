@@ -87,7 +87,7 @@ export function useTabList() {
   function initTabList() {
     // 从cookie中获取缓存起来的标签导航栏数据
     let tabs = getTabList()
-    if(tabs !=null) {
+    if(tabs) {
       tabList.value = tabs
     }
   }
