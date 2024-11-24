@@ -81,14 +81,16 @@ import { login } from '@/api/admin/user'
 import { ref, reactive, onMounted, onBeforeMount } from 'vue'
 import router from '@/router'
 import { showMessage } from '@/composables/util'
-import { ElMessage } from 'element-plus'
 import { setToken } from '@/composables/cookie'
+import { useUserStore } from '@/stores/user'
 
 //定义响应式的表单对象
 const form = reactive({
   username: '',
   password: ''
 })
+
+const userStore = useUserStore()
 
 //表单引用
 const formRef = ref(null)
@@ -116,7 +118,7 @@ onBeforeMount(() => {
 })
 
 //登录
-const onSubmit = () => {
+const onSubmit = async () => {
   console.log('登录')
 
   //先校验 form 表单字段
@@ -137,16 +139,26 @@ const onSubmit = () => {
           //提示登录成功
           showMessage('登录成功')
           let token = res.data.tokenValue
-          console.log("token: "+token);
-          
+          console.log('token: ' + token)
+
           setToken(token)
-          router.push('/admin/index')
-        } else {
-          //获取服务器端返回的错误信息
-          let message = res.message
-          //提示信息
-          showMessage(message, 'error')
+          userStore.setUserInfo()
         }
+        // else {
+        //   //获取服务器端返回的错误信息
+        //   let message = res.message
+        //   //提示信息
+        //   showMessage(message, 'error')
+        // }
+      })
+      .then(() => {
+        // 现在 userInfo 已经被设置了
+        console.log('getUserInfo：', userStore.userInfo.value)
+        router.push('/admin/index')
+      })
+      .catch((error) => {
+        // 处理错误
+        console.error(error)
       })
       .finally(() => {
         //结束加载

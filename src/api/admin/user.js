@@ -8,3 +8,8 @@ export function login(username, password) {
 export function updatePassword(data) {
   return axios.put('/user/updatePassword', data)
 }
+
+// 获取登录用户信息
+export function getUserInfo() {
+  return axios.post('/admin/user/info')
+}

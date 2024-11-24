@@ -48,6 +48,7 @@
         >
           <!-- 头像 -->
           <el-avatar :size="40" src="/src/assets/naruto.jpg"></el-avatar>
+          {{ userStore.userInfo.value }}
           <el-icon class="el-icon--right">
             <arrow-down />
           </el-icon>
@@ -68,9 +69,11 @@ import { useMenuStore } from '@/stores/menu'
 import { useFullscreen } from '@vueuse/core'
 import { updatePassword } from '@/api/admin/user'
 const menuStore = useMenuStore()
+import { useUserStore } from '@/stores/user'
 
+// 引入了用户 Store
+const userStore = useUserStore()
 const { isFullscreen, toggle } = useFullscreen()
-
 const handleMenuWidth = () => {
   menuStore.handleMenuWidth()
 }
