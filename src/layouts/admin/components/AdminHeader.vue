@@ -55,27 +55,170 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>修改密码</el-dropdown-item>
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item @click="handleCommand('updatePassword')">修改密码</el-dropdown-item>
+            <el-dropdown-item @click="handleCommand('logout')">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
     </div>
   </div>
+  <!-- 修改密码 -->
+  <el-dialog
+    v-model="dialogVisible"
+    title="修改密码"
+    width="40%"
+    :draggable="true"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+  >
+    <el-form ref="formRef" :rules="rules" :model="form">
+      <el-form-item label="用户名" prop="username" label-width="120px">
+        <!-- 输入框组件 -->
+        <el-input
+          size="large"
+          v-model="form.username"
+          placeholder="请输入用户名"
+          clearable
+          disabled
+        />
+      </el-form-item>
+      <el-form-item label="密码" prop="password" label-width="120px">
+        <el-input
+          size="large"
+          type="password"
+          v-model="form.password"
+          placeholder="请输入密码"
+          clearable
+          show-password
+        />
+      </el-form-item>
+      <el-form-item label="确认密码" prop="rePassword" label-width="120px">
+        <el-input
+          size="large"
+          type="password"
+          v-model="form.rePassword"
+          placeholder="请确认密码"
+          clearable
+          show-password
+        />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="onSubmit"> 提交 </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
 import { useMenuStore } from '@/stores/menu'
 import { useFullscreen } from '@vueuse/core'
+import { ref, reactive } from 'vue'
 import { updatePassword } from '@/api/admin/user'
 const menuStore = useMenuStore()
 import { useUserStore } from '@/stores/user'
+import { showMessage, showModel } from '@/composables/util'
+import { useRouter } from 'vue-router'
 
 // 引入了用户 Store
 const userStore = useUserStore()
+const router = useRouter()
+const formRef = ref(null)
+const form = reactive({
+  username: userStore.userInfo.username || '',
+  password: '',
+  rePassword: ''
+})
+
+// 规则校验
+const rules = {
+  username: [
+    {
+      required: true,
+      message: '用户名不能为空',
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: '密码不能为空',
+      trigger: 'blur'
+    }
+  ],
+  rePassword: [
+    {
+      required: true,
+      message: '确认密码不能为空',
+      trigger: 'blur'
+    }
+  ]
+}
 const { isFullscreen, toggle } = useFullscreen()
 const handleMenuWidth = () => {
   menuStore.handleMenuWidth()
+}
+
+const dialogVisible = ref(false)
+const onSubmit = () => {
+  // 先验证 form 表单字段
+  formRef.value.validate((valid) => {
+    if (!valid) {
+      console.log('表单验证不通过')
+      return false
+    }
+
+    if (form.password != form.rePassword) {
+      showMessage('两次密码输入不一致，请检查！', 'warning')
+      return
+    }
+
+    // 调用修改用户密码接口
+    updatePassword(form).then((res) => {
+      console.log(res)
+      // 判断是否成功
+      if (res.success == true) {
+        showMessage('密码重置成功，请重新登录！')
+        // 退出登录
+        userStore.logout()
+
+        // 隐藏对话框
+        dialogVisible.value = false
+
+        // 跳转登录页
+        router.push('/login')
+      } else {
+        // 获取服务端返回的错误消息
+        let message = res.message
+        // 提示消息
+        showMessage(message, 'error')
+      }
+    })
+  })
+}
+
+// 下拉菜单事件处理
+const handleCommand = (command) => {
+  // 更新密码
+  if (command == 'updatePassword') {
+    // 省略...
+    dialogVisible.value = true
+  } else if (command == 'logout') {
+    // 退出登录
+    logout()
+  }
+}
+
+// 退出登录
+function logout() {
+  showModel('是否确认要退出登录？').then(() => {
+    userStore.logout()
+    showMessage('退出登录成功！')
+    // 跳转登录页
+    router.push('/login')
+  })
 }
 
 const handleRefresh = () => {

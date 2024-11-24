@@ -6,7 +6,7 @@ export function login(username, password) {
 }
 
 export function updatePassword(data) {
-  return axios.put('/user/updatePassword', data)
+  return axios.put('/admin/user/updatePassword', { data })
 }
 
 // 获取登录用户信息
