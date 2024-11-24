@@ -7,9 +7,9 @@
       <div
         class="flex justify-center items-center h-full flex-col animate__animated animate__bounceInLeft animate__fast"
       >
-        <h2 class="font-bold text-4xl mb-7 text-white">naruto 博客登录</h2>
+        <h2 class="font-bold text-4xl mb-7 text-white">DevOps 集成系统</h2>
         <p class="text-white">
-          一款由 Springboot + Mybatis Plus + Vue 3.2 + Vite 4 开发的前后端博客。
+          一款由 Springboot + Mybatis Plus + Vue 3.2 + Vite 4 开发的CI/CD持续集成系统。
         </p>
         <img src="@/assets/developer.png" alt="" class="w-1/2" />
       </div>
@@ -83,6 +83,7 @@ import router from '@/router'
 import { showMessage } from '@/composables/util'
 import { ElMessage } from 'element-plus'
 import { setToken } from '@/composables/auth'
+import axios, { Axios } from 'axios'
 
 //定义响应式的表单对象
 const form = reactive({
@@ -126,24 +127,45 @@ const onSubmit = () => {
       return false
     }
     loading.value = true
-    showMessage('登录成功')
-    router.push('/admin/index')
-
+    // showMessage('登录成功')
+    // router.push('/admin/index')
+    console.log('调用登录接口...')
+    const params = {
+      username: form.username,
+      password: form.password
+    }
+    // 直接走ip+端口调用
+    login(params).then(function (response) {
+      console.log(response)
+      if (response.data.code == '200') {
+        //提示登录成功
+        showMessage('登录成功')
+        let token = response.data.tokenValue
+        setToken(token)
+        router.push('/admin/index')
+      } else {
+        //获取服务器端返回的错误信息
+        let message = response.message
+        //提示信息
+        showMessage('登录失败！用户名或密码错误！', 'error')
+        loading.value = false
+      }
+    })
     // login(form.username, form.password)
     //   .then((res) => {
-    //     console.log(res)
+    //     console.log('调用登录接口后的返回值：', res)
 
-    //     if (res.success == true) {
+    //     if (res.data.code == '200') {
     //       //提示登录成功
     //       showMessage('登录成功')
-    //       let token = res.token
+    //       let token = res.data.tokenValue
     //       setToken(token)
     //       router.push('/admin/index')
     //     } else {
     //       //获取服务器端返回的错误信息
     //       let message = res.message
     //       //提示信息
-    //       showMessage(message, 'error')
+    //       showMessage('登录失败！用户名或密码错误！', 'error')
     //     }
     //   })
     //   .finally(() => {
