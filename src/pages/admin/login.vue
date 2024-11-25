@@ -132,7 +132,7 @@ const onSubmit = async () => {
     //router.push('/admin/index')
 
     login(form.username, form.password)
-      .then((res) => {
+      .then(async (res) => {
         console.log(res)
 
         if (res.success == true) {
@@ -142,7 +142,7 @@ const onSubmit = async () => {
           console.log('token: ' + token)
 
           setToken(token)
-          userStore.setUserInfo()
+          await userStore.setUserInfo()
         }
         // else {
         //   //获取服务器端返回的错误信息
