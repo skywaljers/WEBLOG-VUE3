@@ -14,7 +14,7 @@ router.beforeEach((to, from, next) => {
   //校验是否登录，未登录则跳转登录页
   let token = getToken()
   if (!token && to.path.startsWith('/admin')) {
-    showMessage('请先登录', 'warning')
+    // showMessage('请先登录', 'warning')
     next({ path: '/login' })
     hidePageLoading()
   } else if (token && to.path == '/login') {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-slate-800 h-screen text-white menu-container transition-all"
+    class="fixed overflow-y-auto bg-slate-800 h-screen text-white menu-container transition-all"
     :style="{ width: menuStore.menuWidth }"
   >
     <!-- logo -->

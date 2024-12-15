@@ -143,13 +143,12 @@ const onSubmit = async () => {
 
           setToken(token)
           await userStore.setUserInfo()
+        } else {
+          //获取服务器端返回的错误信息
+          let message = res.message
+          //提示信息
+          showMessage(message, 'error')
         }
-        // else {
-        //   //获取服务器端返回的错误信息
-        //   let message = res.message
-        //   //提示信息
-        //   showMessage(message, 'error')
-        // }
       })
       .then(() => {
         // 现在 userInfo 已经被设置了
