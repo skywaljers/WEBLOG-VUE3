@@ -7,6 +7,8 @@ import AdminArticleList from '@/pages/admin/article-list.vue'
 import AdminCategoryList from '@/pages/admin/category-list.vue'
 import AdminTagList from '@/pages/admin/tag-list.vue'
 import AdminBlogSetting from '@/pages/admin/blog-setting.vue'
+import ArchiveList from '@/pages/frontend/archive-list.vue'
+import CategoryList from '@/pages/frontend/category-list.vue'
 //统一声明路由
 const routes = [
   {
@@ -26,47 +28,62 @@ const routes = [
     }
   },
   {
-    path: "/admin", //后台首页
+    path: '/archive/list', // 归档页
+    component: ArchiveList,
+    meta: {
+      // meta 信息
+      title: 'Weblog 归档页'
+    }
+  },
+  {
+    path: '/category/list', // 分类页
+    component: CategoryList,
+    meta: {
+      // meta 信息
+      title: 'Weblog 分类页'
+    }
+  },
+  {
+    path: '/admin', //后台首页
     component: Admin, //对应Admin.vue文件
     children: [
       {
         path: '/admin/index',
-        component: AdminIndex,//主内容区域，具体需要渲染的内容
+        component: AdminIndex, //主内容区域，具体需要渲染的内容
         meta: {
           title: 'Admin 后台首页'
         }
       },
       {
         path: '/admin/article/list',
-        component: AdminArticleList,//主内容区域，具体需要渲染的内容
+        component: AdminArticleList, //主内容区域，具体需要渲染的内容
         meta: {
           title: '文章管理'
         }
       },
       {
         path: '/admin/category/list',
-        component: AdminCategoryList,//主内容区域，具体需要渲染的内容
+        component: AdminCategoryList, //主内容区域，具体需要渲染的内容
         meta: {
           title: '分类管理'
         }
       },
       {
         path: '/admin/tag/list',
-        component: AdminTagList,//主内容区域，具体需要渲染的内容
+        component: AdminTagList, //主内容区域，具体需要渲染的内容
         meta: {
           title: '标签管理'
         }
       },
       {
         path: '/admin/blog/setting',
-        component: AdminBlogSetting,//主内容区域，具体需要渲染的内容
+        component: AdminBlogSetting, //主内容区域，具体需要渲染的内容
         meta: {
           title: '博客设置'
         }
       }
     ]
   }
-  
 ]
 
 //创建路由
