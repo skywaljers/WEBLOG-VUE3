@@ -9,6 +9,8 @@ import AdminTagList from '@/pages/admin/tag-list.vue'
 import AdminBlogSetting from '@/pages/admin/blog-setting.vue'
 import ArchiveList from '@/pages/frontend/archive-list.vue'
 import CategoryList from '@/pages/frontend/category-list.vue'
+import CategoryArticleList from '@/pages/frontend/category-article-list.vue'
+
 //统一声明路由
 const routes = [
   {
@@ -41,6 +43,14 @@ const routes = [
     meta: {
       // meta 信息
       title: 'Weblog 分类页'
+    }
+  },
+  {
+    path: '/category/article/list', // 分类文章页
+    component: CategoryArticleList,
+    meta: {
+      // meta 信息
+      title: 'Weblog 分类文章页'
     }
   },
   {
