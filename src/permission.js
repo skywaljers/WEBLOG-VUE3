@@ -1,6 +1,7 @@
 import router from '@/router/index'
 import { getToken } from './composables/cookie'
 import showMessage, { hidePageLoading, showPageLoading } from './composables/util'
+import { useBlogSettingsStore } from '@/stores/blogsettings'
 
 //全局路由前置守卫
 //通过使用 router.beforeEach 注册一个全局前置守卫，每个守卫默认接受两个参数：
@@ -14,7 +15,7 @@ router.beforeEach((to, from, next) => {
   //校验是否登录，未登录则跳转登录页
   let token = getToken()
   if (!token && to.path.startsWith('/admin')) {
-    // showMessage('请先登录', 'warning')
+    showMessage('请先登录', 'warning')
     next({ path: '/login' })
     hidePageLoading()
   } else if (token && to.path == '/login') {
@@ -22,6 +23,10 @@ router.beforeEach((to, from, next) => {
     showMessage('请勿重复登录', 'warning')
     //跳转到后台首页
     next({ path: '/admin/index' })
+  } else if (!to.path.startsWith('/admin')) {
+    let blogSettingsStore = useBlogSettingsStore()
+    blogSettingsStore.getBlogSettings()
+    next()
   } else {
     next()
   }

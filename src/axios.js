@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { getToken, removeToken } from './composables/cookie'
 import showMessage from './composables/util'
+import { useUserStore } from '@/stores/user'
 
 //创建实例
 const instance = axios.create({
@@ -29,6 +30,8 @@ instance.interceptors.request.use(
     if (status == 401) {
       // 删除 cookie 中的令牌
       removeToken()
+      let userStore = useUserStore()
+      userStore.logout()
       // 刷新页面
       location.reload()
     }
