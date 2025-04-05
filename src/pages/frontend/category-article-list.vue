@@ -34,9 +34,13 @@
             v-if="articles && articles.length > 0"
             class="mt-3 divide-y divider-gray-200 dark:divide-gray-700"
           >
-            <li v-for="(article, index) in articles" :key="index">
+            <li
+              v-for="(article, index) in articles"
+              :key="index"
+              @click="goArticleDetailPage(article.id)"
+            >
               <a
-                href="#"
+                @click="goArticleDetailPage(article.id)"
                 class="items-center block p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <img class="w-24 h-12 mb-3 mr-3 rounded-lg sm:mb-0" :src="article.cover" />
@@ -660,17 +664,21 @@
 
       <!-- 右边侧边栏，占用一列 -->
       <aside class="col-span-4 md:col-span-1">
-        <!-- 博主信息 -->
-        <UserInfoCard></UserInfoCard>
+        <div class="sticky top-[5.5rem]">
+          <!-- 博主信息 -->
+          <UserInfoCard></UserInfoCard>
 
-        <!-- 分类 -->
-        <CategoryListCard></CategoryListCard>
+          <!-- 分类 -->
+          <CategoryListCard></CategoryListCard>
 
-        <!-- 标签 -->
-        <TagListCard></TagListCard>
+          <!-- 标签 -->
+          <TagListCard></TagListCard>
+        </div>
       </aside>
     </div>
   </main>
+
+  <ScrollToTopButton></ScrollToTopButton>
 
   <Footer></Footer>
 </template>
@@ -681,10 +689,12 @@ import Footer from '@/layouts/frontend/components/Footer.vue'
 import UserInfoCard from '@/layouts/frontend/components/UserInfoCard.vue'
 import TagListCard from '@/layouts/frontend/components/TagListCard.vue'
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue'
+import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.vue'
 import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { getCategoryArticlePageList } from '@/api/frontend/category'
 const route = useRoute()
+const router = useRouter()
 
 // 分类名称
 const categoryName = ref(route.query.name)
@@ -725,4 +735,8 @@ function getCategoryArticles(currentNo) {
   )
 }
 getCategoryArticles(current.value)
+// 跳转文章详情页
+const goArticleDetailPage = (articleId) => {
+  router.push('/article/' + articleId)
+}
 </script>

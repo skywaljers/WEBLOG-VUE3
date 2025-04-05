@@ -13,14 +13,21 @@
 
       <!-- 右边侧边栏，占用一列 -->
       <aside class="col-span-4 md:col-span-1">
-        <!-- 博主信息 -->
-        <UserInfoCard></UserInfoCard>
+        <div class="sticky top-[5.5rem]">
+          <!-- 博主信息 -->
+          <UserInfoCard></UserInfoCard>
 
-        <!-- 标签 -->
-        <TagListCard></TagListCard>
+          <!-- 分类 -->
+          <CategoryListCard></CategoryListCard>
+
+          <!-- 标签 -->
+          <TagListCard></TagListCard>
+        </div>
       </aside>
     </div>
   </main>
+
+  <ScrollToTopButton></ScrollToTopButton>
 
   <Footer></Footer>
 </template>
@@ -31,4 +38,5 @@ import Footer from '@/layouts/frontend/components/Footer.vue'
 import UserInfoCard from '@/layouts/frontend/components/UserInfoCard.vue'
 import TagListCard from '@/layouts/frontend/components/TagListCard.vue'
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue'
+import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.vue'
 </script>

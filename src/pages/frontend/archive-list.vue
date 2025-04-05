@@ -20,7 +20,7 @@
             <ol class="mt-3 divide-y divider-gray-200 dark:divide-gray-700">
               <li v-for="(article, index2) in archive.articles" :key="index2">
                 <a
-                  href="#"
+                  @click="goArticleDetailPage(article.id)"
                   class="items-center block p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   <img class="w-24 h-12 mb-3 mr-3 rounded-lg sm:mb-0" :src="article.cover" />
@@ -132,17 +132,22 @@
 
       <!-- 右边侧边栏，占用一列 -->
       <aside class="col-span-4 md:col-span-1">
-        <!-- 博主信息 -->
-        <UserInfoCard></UserInfoCard>
+        <div class="sticky top-[5.5rem]">
+          <!-- 博主信息 -->
+          <UserInfoCard></UserInfoCard>
 
-        <!-- 分类 -->
-        <CategoryListCard></CategoryListCard>
+          <!-- 分类 -->
+          <CategoryListCard></CategoryListCard>
 
-        <!-- 标签 -->
-        <TagListCard></TagListCard>
+          <!-- 标签 -->
+          <TagListCard></TagListCard>
+        </div>
       </aside>
     </div>
   </main>
+
+  <!-- 返回顶部 -->
+  <ScrollToTopButton></ScrollToTopButton>
 
   <Footer></Footer>
 </template>
@@ -153,8 +158,10 @@ import Footer from '@/layouts/frontend/components/Footer.vue'
 import UserInfoCard from '@/layouts/frontend/components/UserInfoCard.vue'
 import TagListCard from '@/layouts/frontend/components/TagListCard.vue'
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue'
+import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.vue'
 import { getArchivePageList } from '@/api/frontend/archive'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 // 文章归档
 const archives = ref([])
@@ -166,6 +173,7 @@ const size = ref(10)
 const total = ref(0)
 // 总共多少页
 const pages = ref(0)
+const router = useRouter()
 
 function getArchives(currentNo) {
   // 上下页是否能点击判断，当要跳转上一页且页码小于 1 时，则不允许跳转；当要跳转下一页且页码大于总页数时，则不允许跳转
@@ -182,4 +190,9 @@ function getArchives(currentNo) {
   })
 }
 getArchives(current.value)
+
+// 跳转文章详情页
+const goArticleDetailPage = (articleId) => {
+  router.push('/article/' + articleId)
+}
 </script>

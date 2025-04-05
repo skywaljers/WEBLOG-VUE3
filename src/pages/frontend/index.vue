@@ -14,7 +14,7 @@
               class="bg-white border h-full border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700"
             >
               <!-- 文章封面 -->
-              <a href="#">
+              <a @click="goArticleDetailPage(article.id)">
                 <img class="rounded-t-lg h-48 w-full" :src="article.cover" alt="" />
               </a>
               <div class="p-5">
@@ -29,7 +29,7 @@
                   >
                 </div>
                 <!-- 文章标题 -->
-                <a href="#">
+                <a @click="goArticleDetailPage(article.id)">
                   <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                     {{ article.title }}
                   </h2>
@@ -159,15 +159,21 @@
 
       <!-- 右边侧边栏，占用一列 -->
       <aside class="col-span-4 md:col-span-1">
-        <!-- 博主信息 -->
-        <UserInfoCard />
-        <!-- 分类 -->
-        <CategoryListCard></CategoryListCard>
-        <!-- 标签 -->
-        <TagListCard></TagListCard>
+        <div class="sticky top-[5.5rem]">
+          <!-- 博主信息 -->
+          <UserInfoCard></UserInfoCard>
+
+          <!-- 分类 -->
+          <CategoryListCard></CategoryListCard>
+
+          <!-- 标签 -->
+          <TagListCard></TagListCard>
+        </div>
       </aside>
     </div>
   </main>
+
+  <ScrollToTopButton></ScrollToTopButton>
   <Footer />
 </template>
 
@@ -180,6 +186,7 @@ import { getArticlePageList } from '@/api/frontend/article'
 import UserInfoCard from '@/layouts/frontend/components/UserInfoCard.vue'
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue'
 import TagListCard from '@/layouts/frontend/components/TagListCard.vue'
+import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.vue'
 import { useRouter } from 'vue-router'
 
 // initialize components based on data attribute selectors
@@ -227,5 +234,10 @@ const goTagArticleListPage = (id, name) => {
   // 跳转时通过 query 携带参数（标签 ID、标签名称）
   console.log('---开始跳转标签详情页')
   router.push({ path: '/tag/article/list', query: { id, name } })
+}
+
+// 跳转文章详情页
+const goArticleDetailPage = (articleId) => {
+  router.push('/article/' + articleId)
 }
 </script>

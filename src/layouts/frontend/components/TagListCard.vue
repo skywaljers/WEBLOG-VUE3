@@ -29,8 +29,8 @@
     <span
       v-for="(tag, index) in tags"
       :key="index"
-      @click="goTagArticleListPage(tag.id, tag.name)"
       class="inline-block mb-1 cursor-pointer bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-green-200 hover:text-green-900 dark:bg-green-900 dark:text-green-300"
+      @click="goTagArticleListPage(tag.id, tag.name)"
     >
       {{ tag.name }}
     </span>

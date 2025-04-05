@@ -28,6 +28,17 @@
             <el-icon><Refresh /></el-icon>
           </div>
         </el-tooltip>
+        <!-- 点击跳转前台首页 -->
+        <el-tooltip class="box-item" effect="dark" content="跳转前台" placement="bottom">
+          <div
+            class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 hover:bg-gray-200"
+            @click="router.push('/')"
+          >
+            <el-icon>
+              <Monitor />
+            </el-icon>
+          </div>
+        </el-tooltip>
         <!-- 全屏按钮 -->
         <!-- placement指定对齐方式 -->
         <el-tooltip class="box-item" effect="dark" content="全屏" placement="bottom">

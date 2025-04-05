@@ -12,9 +12,20 @@ import CategoryList from '@/pages/frontend/category-list.vue'
 import CategoryArticleList from '@/pages/frontend/category-article-list.vue'
 import TagList from '@/pages/frontend/tag-list.vue'
 import TagArticleList from '@/pages/frontend/tag-article-list.vue'
+import ArticleDetail from '@/pages/frontend/article-detail.vue'
+
+import NotFound from '@/pages/frontend/404.vue'
 
 //统一声明路由
 const routes = [
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound,
+    meta: {
+      title: '404 页'
+    }
+  },
   {
     path: '/', //路由地址
     component: Index, //对应组件
@@ -69,6 +80,14 @@ const routes = [
     meta: {
       // meta 信息
       title: 'Weblog 标签文章页'
+    }
+  },
+  {
+    path: '/article/:articleId', // 文章详情页
+    component: ArticleDetail,
+    meta: {
+      // meta 信息
+      title: 'Weblog 详情页'
     }
   },
   {
