@@ -31,33 +31,36 @@
       </div>
 
       <!-- 文章数量、分类数量、标签数量、总访问量 -->
-      <!-- flex 布局，justify-center 水平居中，gap-5 设置 flex 内子元素的间距 -->
       <div class="flex justify-center gap-5 mb-2">
-        <!-- flex 布局，items-center 垂直居中，flex-col 设置子元素上下排列，hover: 用于设置鼠标移动到上面的样式，字体颜色、scale-110 放大效果，cursor-pointer 指定鼠标移动到上面为小手指样式 -->
         <div
+          @click="router.push('/archive/list')"
           class="flex items-center flex-col gap-1 hover:text-blue-700 hover:scale-110 cursor-pointer"
         >
-          <!-- 字体大小为 text-lg , font-bold 字体加粗 -->
-          <div class="text-lg font-bold">{{ statisticsInfo.articleTotalCount }}</div>
-          <!-- 字体大小为 text-sm -->
+          <CountTo
+            :value="statisticsInfo.articleTotalCount"
+            customClass="text-lg font-bold"
+          ></CountTo>
           <div class="text-sm">文章</div>
         </div>
         <div
+          @click="router.push('/category/list')"
           class="flex items-center flex-col gap-1 hover:text-blue-700 hover:scale-110 cursor-pointer"
         >
-          <div class="text-lg font-bold">{{ statisticsInfo.categoryTotalCount }}</div>
+          <CountTo
+            :value="statisticsInfo.categoryTotalCount"
+            customClass="text-lg font-bold"
+          ></CountTo>
           <div class="text-sm">分类</div>
         </div>
         <div
+          @click="router.push('/tag/list')"
           class="flex items-center flex-col gap-1 hover:text-blue-700 hover:scale-110 cursor-pointer"
         >
-          <div class="text-lg font-bold">{{ statisticsInfo.tagTotalCount }}</div>
+          <CountTo :value="statisticsInfo.tagTotalCount" customClass="text-lg font-bold"></CountTo>
           <div class="text-sm">标签</div>
         </div>
-        <div
-          class="flex items-center flex-col gap-1 hover:text-blue-700 hover:scale-110 cursor-pointer"
-        >
-          <div class="text-lg font-bold">{{ statisticsInfo.pvTotalCount }}</div>
+        <div class="flex items-center flex-col gap-1">
+          <CountTo :value="statisticsInfo.pvTotalCount" customClass="text-lg font-bold"></CountTo>
           <div class="text-sm">总访问量</div>
         </div>
       </div>
@@ -211,11 +214,15 @@ import { useBlogSettingsStore } from '@/stores/blogsettings'
 import { initTooltips } from 'flowbite'
 import { onMounted, ref } from 'vue'
 import { getStatisticsInfo } from '@/api/frontend/statistics'
+import CountTo from '@/components/CountTo.vue'
+import { useRouter } from 'vue-router'
 
 // 初始化 Flowbit 组件
 onMounted(() => {
   initTooltips()
 })
+
+const router = useRouter()
 
 // 引入博客设置信息 store
 const blogSettingsStore = useBlogSettingsStore()

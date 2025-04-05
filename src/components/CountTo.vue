@@ -1,6 +1,6 @@
 <template>
   <!-- 显示 d.num 属性的四舍五入取整后的值（若不加四舍五入，滚动时会显示小数点后面的数字） -->
-  <div class="font-bold text-2xl">{{ d.num.toFixed(0) }}</div>
+  <div class="customClass">{{ d.num.toFixed(0) }}</div>
 </template>
 
 <script setup>
@@ -18,6 +18,10 @@ const props = defineProps({
     // 属性值名称
     type: Number, // 类型为数值
     default: 0 // 默认为 0
+  },
+  customClass: {
+    type: String,
+    default: ''
   }
 })
 
